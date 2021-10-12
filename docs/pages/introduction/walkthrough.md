@@ -38,7 +38,6 @@ Let's scroll through the [API Reference](/versions/latest/) to find packages tha
 
 Let's say we had mockups for our app that look like the following:
 
-
 <ImageSpotlight alt="Mockups of app screens" src="/static/images/exploring-managed/mockups.png" />
 
 > _Note: These are actually screenshots from [Sindre Sorhus'](https://github.com/sindresorhus) open source app [Blear](https://sindresorhus.com/blear), but let's pretend they are mockups for the sake of demonstration._
@@ -79,7 +78,7 @@ You may have noticed that when we ran `expo publish` the CLI warned us about opt
 
 Upon publishing you are given a persistent URL that you can share with colleagues, in this case it was [https://expo.dev/@notbrent/blearexp](https://expo.dev/@notbrent/blearexp). This is determined by your Expo account username and the `slug` field in your project `app.json`.
 
-On iOS, only you can open projects that you have built unless you have a [priority plan](https://expo.dev/developer-services), in which case your teammates can open your projects as well. Another option to open any published managed app is to do a custom build of an Expo iOS client. [Read more about that here](../guides/adhoc-builds.md).
+On iOS, only you can open projects that you have built unless you have a [priority plan](https://expo.dev/developer-services), in which case your teammates can open your projects as well.
 
 ## Building and deploying
 

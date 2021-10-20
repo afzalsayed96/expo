@@ -22,7 +22,7 @@ import java.io.IOException
 import java.util.*
 import kotlin.math.min
 
-class FileDownloader(context: Context) {
+open class FileDownloader(context: Context) {
   private val client = OkHttpClient.Builder().cache(getCache(context)).build()
 
   interface FileDownloadCallback {
@@ -196,7 +196,7 @@ class FileDownloader(context: Context) {
     } else {
       try {
         downloadFileToPath(
-          setHeadersForUrl(asset.url, configuration),
+          setHeadersForUrl(asset.url!!, configuration),
           path,
           object : FileDownloadCallback {
             override fun onFailure(e: Exception) {
@@ -249,7 +249,7 @@ class FileDownloader(context: Context) {
       configuration: UpdatesConfiguration,
       callback: ManifestDownloadCallback
     ) {
-      if (configuration.expectsSignedManifest()) {
+      if (configuration.expectsSignedManifest) {
         preManifest.put("isVerified", isVerified)
       }
       val updateManifest = getManifest(preManifest, ManifestResponse(response), configuration)
@@ -281,7 +281,7 @@ class FileDownloader(context: Context) {
         for (i in 0 until manifestArray.length()) {
           val manifestCandidate = manifestArray.getJSONObject(i)
           val sdkVersion = manifestCandidate.getString("sdkVersion")
-          if (configuration.sdkVersion != null && configuration.sdkVersion.split(",").contains(sdkVersion)
+          if (configuration.sdkVersion != null && configuration.sdkVersion!!.split(",").contains(sdkVersion)
           ) {
             return manifestCandidate
           }
@@ -316,12 +316,6 @@ class FileDownloader(context: Context) {
     ): Request {
       return Request.Builder()
         .url(configuration.updateUrl.toString())
-        .header("Accept", "application/expo+json,application/json")
-        .header("Expo-Platform", "android")
-        .header("Expo-API-Version", "1")
-        .header("Expo-Updates-Environment", "BARE")
-        .header("Expo-JSON-Error", "true")
-        .header("Expo-Accept-Signature", configuration.expectsSignedManifest().toString())
         .apply {
           // apply extra headers before anything else, so they don't override preset headers
           if (extraHeaders != null) {
@@ -332,6 +326,12 @@ class FileDownloader(context: Context) {
             }
           }
         }
+        .header("Accept", "application/expo+json,application/json")
+        .header("Expo-Platform", "android")
+        .header("Expo-API-Version", "1")
+        .header("Expo-Updates-Environment", "BARE")
+        .header("Expo-JSON-Error", "true")
+        .header("Expo-Accept-Signature", configuration.expectsSignedManifest.toString())
         .apply {
           val runtimeVersion = configuration.runtimeVersion
           val sdkVersion = configuration.sdkVersion

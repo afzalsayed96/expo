@@ -222,7 +222,7 @@ class LoaderTask(
         diskUpdateCallback.onSuccess()
       }
     }
-    if (configuration.hasEmbeddedUpdate()) {
+    if (configuration.hasEmbeddedUpdate) {
       // if the embedded update should be launched (e.g. if it's newer than any other update we have
       // in the database, which can happen if the app binary is updated), load it into the database
       // so we can launch it
@@ -237,7 +237,7 @@ class LoaderTask(
               launcher.launch(database, context, launcherCallback)
             }
 
-            override fun onSuccess(update: UpdateEntity) {
+            override fun onSuccess(update: UpdateEntity?) {
               launcher.launch(database, context, launcherCallback)
             }
 
@@ -298,7 +298,7 @@ class LoaderTask(
             }
           }
 
-          override fun onSuccess(update: UpdateEntity) {
+          override fun onSuccess(update: UpdateEntity?) {
             // a new update has loaded successfully; we need to launch it with a new Launcher and
             // replace the old Launcher so that the callback fires with the new one
             val newLauncher = DatabaseLauncher(configuration, directory, fileDownloader, selectionPolicy)

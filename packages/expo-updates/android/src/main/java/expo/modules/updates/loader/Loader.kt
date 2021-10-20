@@ -33,7 +33,7 @@ abstract class Loader protected constructor(
 
   interface LoaderCallback {
     fun onFailure(e: Exception)
-    fun onSuccess(update: UpdateEntity)
+    fun onSuccess(update: UpdateEntity?)
 
     /**
      * Called when an asset has either been successfully downloaded or failed to download.
@@ -125,8 +125,8 @@ abstract class Loader protected constructor(
       )
       return
     }
-    ManifestMetadata.saveMetadata(updateManifest, database, configuration)
-    callback!!.onSuccess(updateEntity!!)
+    ManifestMetadata.saveMetadata(updateManifest!!, database, configuration)
+    callback!!.onSuccess(updateEntity)
     reset()
   }
 
@@ -149,7 +149,7 @@ abstract class Loader protected constructor(
       // insert into database but don't try to load any assets;
       // the RN runtime will take care of that and we don't want to cache anything
       val updateEntity = updateManifest.updateEntity
-      database.updateDao().insertUpdate(updateEntity)
+      database.updateDao().insertUpdate(updateEntity!!)
       database.updateDao().markUpdateFinished(updateEntity)
       finishWithSuccess()
       return
@@ -179,7 +179,7 @@ abstract class Loader protected constructor(
       if (existingUpdateEntity == null) {
         // no update already exists with this ID, so we need to insert it and download everything.
         updateEntity = newUpdateEntity
-        database.updateDao().insertUpdate(updateEntity)
+        database.updateDao().insertUpdate(updateEntity!!)
       } else {
         // we've already partially downloaded the update, so we should use the existing entity.
         // however, it's not ready, so we should try to download all the assets again.
@@ -225,7 +225,7 @@ abstract class Loader protected constructor(
         object : AssetDownloadCallback {
           override fun onFailure(e: Exception, assetEntity: AssetEntity) {
             val identifier = if (assetEntity.hash != null) "hash " + UpdatesUtils.bytesToHex(
-              assetEntity.hash
+              assetEntity.hash!!
             ) else "key " + assetEntity.key
             Log.e(TAG, "Failed to download asset with $identifier", e)
             handleAssetDownloadCompleted(assetEntity, AssetLoadResult.ERRORED)
@@ -263,7 +263,7 @@ abstract class Loader protected constructor(
       try {
         for (asset in existingAssetList) {
           val existingAssetFound = database.assetDao()
-            .addExistingAssetToUpdate(updateEntity, asset, asset.isLaunchAsset)
+            .addExistingAssetToUpdate(updateEntity!!, asset, asset.isLaunchAsset)
           if (!existingAssetFound) {
             // the database and filesystem have gotten out of sync
             // do our best to create a new entry for this file even though it already existed on disk
@@ -279,10 +279,10 @@ abstract class Loader protected constructor(
           }
         }
 
-        database.assetDao().insertAssets(finishedAssetList, updateEntity)
+        database.assetDao().insertAssets(finishedAssetList, updateEntity!!)
 
         if (erroredAssetList.size == 0) {
-          database.updateDao().markUpdateFinished(updateEntity, skippedAssetList.size != 0)
+          database.updateDao().markUpdateFinished(updateEntity!!, skippedAssetList.size != 0)
         }
       } catch (e: Exception) {
         finishWithError("Error while adding new update to database", e)

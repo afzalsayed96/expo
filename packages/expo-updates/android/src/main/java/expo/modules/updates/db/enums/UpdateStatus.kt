@@ -1,5 +1,5 @@
-package expo.modules.updates.db.enums;
+package expo.modules.updates.db.enums
 
-public enum UpdateStatus {
+enum class UpdateStatus {
   FAILED, READY, LAUNCHABLE, PENDING, UNUSED, EMBEDDED, DEVELOPMENT
 }

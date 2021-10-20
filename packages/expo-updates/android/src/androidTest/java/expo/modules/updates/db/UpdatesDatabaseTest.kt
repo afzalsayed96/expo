@@ -47,7 +47,7 @@ class UpdatesDatabaseTest {
 
     val byId = updateDao.loadUpdateWithId(uuid)
     Assert.assertNotNull(byId)
-    Assert.assertEquals(uuid, byId.id)
+    Assert.assertEquals(uuid, byId!!.id)
     Assert.assertEquals(date, byId.commitTime)
     Assert.assertEquals(runtimeVersion, byId.runtimeVersion)
     Assert.assertEquals(projectId, byId.scopeKey)

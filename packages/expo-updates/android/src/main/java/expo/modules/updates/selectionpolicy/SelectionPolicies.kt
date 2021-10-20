@@ -9,12 +9,12 @@ object SelectionPolicies {
   val TAG = SelectionPolicies::class.java.simpleName
 
   fun matchesFilters(update: UpdateEntity, manifestFilters: JSONObject?): Boolean {
-    if (manifestFilters == null || update.manifest == null || !update.manifest.has("metadata")) {
+    if (manifestFilters == null || update.manifest == null || !update.manifest!!.has("metadata")) {
       // empty matches all
       return true
     }
     try {
-      val metadata = update.manifest.getJSONObject("metadata")
+      val metadata = update.manifest!!.getJSONObject("metadata")
 
       // create lowercase copy for case-insensitive search
       val metadataLCKeys = JSONObject()

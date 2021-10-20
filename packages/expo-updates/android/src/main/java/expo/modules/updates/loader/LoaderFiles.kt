@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException
 /**
  * Utility class for Loader and its subclasses, to allow for easy mocking
  */
-class LoaderFiles {
+open class LoaderFiles {
   fun fileExists(destination: File): Boolean {
     return destination.exists()
   }
@@ -44,7 +44,7 @@ class LoaderFiles {
     context: Context
   ): ByteArray {
     try {
-      context.assets.open(asset.embeddedAssetFilename)
+      context.assets.open(asset.embeddedAssetFilename!!)
         .use { inputStream -> return UpdatesUtils.sha256AndWriteToFile(inputStream, destination) }
     } catch (e: Exception) {
       Log.e(TAG, "Failed to copy asset " + asset.embeddedAssetFilename, e)

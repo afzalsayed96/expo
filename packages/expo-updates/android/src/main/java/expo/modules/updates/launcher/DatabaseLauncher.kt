@@ -55,10 +55,10 @@ class DatabaseLauncher(
       return
     }
 
-    database.updateDao().markUpdateAccessed(launchedUpdate)
+    database.updateDao().markUpdateAccessed(launchedUpdate!!)
 
     if (launchedUpdate!!.status == UpdateStatus.EMBEDDED) {
-      bundleAssetName = EmbeddedLoader.Companion.BARE_BUNDLE_FILENAME
+      bundleAssetName = EmbeddedLoader.BARE_BUNDLE_FILENAME
       if (localAssetFiles != null) {
         throw AssertionError("mLocalAssetFiles should be null for embedded updates")
       }

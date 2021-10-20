@@ -7,13 +7,13 @@ import androidx.test.platform.app.InstrumentationRegistry
 import expo.modules.updates.db.entity.UpdateEntity
 import expo.modules.updates.db.enums.UpdateStatus
 import expo.modules.updates.db.entity.AssetEntity
+import io.mockk.every
+import io.mockk.spyk
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito
 import java.util.*
 
 @RunWith(AndroidJUnit4ClassRunner::class)
@@ -76,11 +76,8 @@ class DatabaseIntegrityCheckTest {
     Assert.assertEquals(1, db.updateDao().loadAllUpdates().size.toLong())
     Assert.assertEquals(1, db.assetDao().loadAllAssets().size.toLong())
 
-    val integrityCheck = Mockito.spy(
-      DatabaseIntegrityCheck::class.java
-    )
-    Mockito.doReturn(false).`when`(integrityCheck)
-      .assetExists(ArgumentMatchers.any(), ArgumentMatchers.any())
+    val integrityCheck = spyk(DatabaseIntegrityCheck())
+    every { integrityCheck.assetExists(any(), any()) } returns false
     integrityCheck.run(db, context.cacheDir, update1)
 
     val allUpdates = db.updateDao().loadAllUpdates()
@@ -109,11 +106,8 @@ class DatabaseIntegrityCheckTest {
     Assert.assertEquals(1, db.updateDao().loadAllUpdates().size.toLong())
     Assert.assertEquals(1, db.assetDao().loadAllAssets().size.toLong())
 
-    val integrityCheck = Mockito.spy(
-      DatabaseIntegrityCheck::class.java
-    )
-    Mockito.doReturn(true).`when`(integrityCheck)
-      .assetExists(ArgumentMatchers.any(), ArgumentMatchers.any())
+    val integrityCheck = spyk(DatabaseIntegrityCheck())
+    every { integrityCheck.assetExists(any(), any()) } returns true
     integrityCheck.run(db, context.cacheDir, update1)
 
     val allUpdates = db.updateDao().loadAllUpdates()

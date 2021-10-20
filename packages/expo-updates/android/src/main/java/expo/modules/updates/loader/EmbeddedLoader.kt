@@ -49,7 +49,7 @@ class EmbeddedLoader internal constructor(
 
   override fun loadManifest(
     context: Context,
-    database: UpdatesDatabase?,
+    database: UpdatesDatabase,
     configuration: UpdatesConfiguration,
     callback: ManifestDownloadCallback
   ) {
@@ -94,7 +94,7 @@ class EmbeddedLoader internal constructor(
   override fun shouldSkipAsset(assetEntity: AssetEntity): Boolean {
     return if (assetEntity.scales == null || assetEntity.scale == null) {
       false
-    } else pickClosestScale(assetEntity.scales) != assetEntity.scale
+    } else pickClosestScale(assetEntity.scales!!) != assetEntity.scale
   }
 
   // https://developer.android.com/guide/topics/resources/providing-resources.html#BestMatch

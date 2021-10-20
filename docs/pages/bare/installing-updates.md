@@ -12,7 +12,7 @@ expo-updates fetches and manages updates to your app stored on a remote server.
 
 ## Installation
 
-Like most Expo modules, **this package requires that you have already [installed and configured react-native-unimodules](/bare/installing-unimodules/). Be sure to install it before continuing.**
+Like most Expo modules, this package requires that you have already [installed and configured react-native-unimodules](/bare/installing-unimodules/). Be sure to install it before continuing.
 
 <InstallSection packageName="expo-updates" cmd={["npm install expo-updates", "npx pod-install"]} hideBareInstructions />
 
@@ -22,14 +22,14 @@ Once installation is complete, apply the changes from the following diffs to con
 
 ## Configuration in JavaScript and JSON
 
-We need to modify `index.js` to import `expo-asset` early in your app, in order to be able to update assets over-the-air. We'll also need to update `metro.config.js` for the same reason. And we'll need to add some Expo-specific configuration to `app.json`.
+We'll need to modify **index.js** to import the `expo-asset` library early in our app, so that we can update assets with updates. We'll also need to update **metro.config.js** for the same reason. Finally, we'll need to add some Expo-specific configuration to **app.json**.
 
 <ConfigurationDiff source="/static/diffs/expo-updates-js.diff" />
 
 <details><summary><h4>💡 What is the SDK version field for?</h4></summary>
 <p>
 
-Currently, all apps published to Expo's servers must be configured with a valid SDK version. We use the SDK version to determine which app binaries a particular update is compatible with. If your app has the `expo` package installed in package.json, your SDK version should match the major version number of this package. Otherwise, you can just use the latest Expo SDK version number (at least `38.0.0`).
+All apps published to Expo's servers must be configured with a valid SDK version. We use the SDK version to determine which app binaries a particular update is compatible with. If your app has the `expo` package installed in **package.json**, your SDK version should match the major version number of this package. Otherwise, you can just use the latest Expo SDK version number (at least `38.0.0`).
 
 </p>
 </details>
@@ -39,7 +39,7 @@ Currently, all apps published to Expo's servers must be configured with a valid 
 <details><summary><h4>💡 How do I customize which assets are included in an update bundle?</h4></summary>
 <p>
 
-If you have assets (such as images or other media) that are imported in your application code, and you would like these to be downloaded atomically as part of an update, add the `assetBundlePatterns` field under the `expo` key in your project's app.json. This field should be an array of file glob strings which point to the assets you want bundled. For example: `"assetBundlePatterns": ["**/*"]`
+If you have assets (such as images or other media) that are imported in your application code and you would like these to be downloaded automatically as part of an update, add the `assetBundlePatterns` field under the `expo` key in your project's **app.json**. This field should be an array of file glob strings which point to the assets you want bundled. For example: `"assetBundlePatterns": ["**/*"]`
 
 </p>
 </details>
@@ -49,7 +49,7 @@ If you have assets (such as images or other media) that are imported in your app
 <details><summary><h4>💡 Migrating from an ExpoKit project?</h4></summary>
 <p>
 
-If you're migrating from an ExpoKit project to the bare workflow with `expo-updates`, remove the `ios.publishBundlePath`, `ios.publishManifestPath`, `android.publishBundlePath`, and `android.publishManifestPath` keys from your app.json.
+If you're migrating from an ExpoKit project to the bare workflow with the `expo-updates` library, remove the `ios.publishBundlePath`, `ios.publishManifestPath`, `android.publishBundlePath`, and `android.publishManifestPath` keys from your **app.json**.
 
 </p>
 </details>
@@ -66,7 +66,7 @@ Once you have applied the changes from the above diff, the following additional 
 
 <div style={{marginTop: -10}} />
 
-- Add the `"Supporting"` directory containing `"Expo.plist"` to your project in Xcode.
+- Add the **Supporting** directory containing **Expo.plist** to your project in Xcode.
 - In Xcode, under the Build Phases tab of your main project, expand the phase entitled "Bundle React Native code and images." Add the following to a new line at the bottom of the script: `` `node --print "require.resolve('expo-updates/package.json').slice(0, -13) + '/scripts/create-manifest-ios.sh'"` `` (supports monorepos and non-default project structure). You can alternatively use this line: `../node_modules/expo-updates/scripts/create-manifest-ios.sh` (supports only default project structure).
 
 <div style={{marginTop: -15}} />
@@ -74,14 +74,14 @@ Once you have applied the changes from the above diff, the following additional 
 <details><summary><h4>💡 What is the create-manifest-ios script for?</h4></summary>
 <p>
 
-This provides expo-updates with some essential metadata about the update and assets that are embedded in your IPA.
+This provides the `expo-updates` library with some essential metadata about the update and assets that are embedded in your IPA.
 
 </p>
 </details>
 
 <div style={{marginTop: -10}} />
 
-<details><summary><h4>💡 Are you using expo-splash-screen in your app?</h4></summary>
+<details><summary><h4>💡 Are you using `expo-splash-screen` in your app?</h4></summary>
 <p>
 
 If you have `expo-splash-screen` installed in your bare workflow project, you'll need to make the following additional change to `AppDelegate.m`:
@@ -112,7 +112,7 @@ If you have `expo-splash-screen` installed in your bare workflow project, you'll
 <details><summary><h4>💡 Are you using ProGuard?</h4></summary>
 <p>
 
-If you have ProGuard enabled, you'll need to add the following rule to `proguard-rules.pro`:
+If you have ProGuard enabled, you'll need to add the following rule to **proguard-rules.pro**:
 
 ```
 -keepclassmembers class com.facebook.react.ReactInstanceManager {
